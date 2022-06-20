@@ -46,26 +46,26 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jLabelNome" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jTextFieldNome" min="-2" pref="190" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
-                              <Component id="jButtonPesquisar" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jLabelTitulo" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jLabelTitulo" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                      <Component id="jScrollPaneTabelaPesquisa" min="-2" pref="381" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPaneTabelaPesquisa" min="-2" pref="391" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jComboBoxTipoPesquisa" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jTextFieldPesquisar" min="-2" pref="190" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jButtonPesquisar" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="40" max="32767" attributes="0"/>
+              <EmptySpace pref="53" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -74,15 +74,15 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Component id="jLabelTitulo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabelNome" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextFieldNome" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jComboBoxTipoPesquisa" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTextFieldPesquisar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonPesquisar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-              <Component id="jScrollPaneTabelaPesquisa" min="-2" pref="245" max="-2" attributes="0"/>
-              <EmptySpace pref="58" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="jScrollPaneTabelaPesquisa" min="-2" pref="257" max="-2" attributes="0"/>
+              <EmptySpace pref="56" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -96,17 +96,29 @@
         <Property name="text" type="java.lang.String" value="Pesquisar Compet&#xea;ncia"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabelNome">
+    <Component class="javax.swing.JComboBox" name="jComboBoxTipoPesquisa">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Nome"/>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="2">
+            <StringItem index="0" value="Nome"/>
+            <StringItem index="1" value="Categoria"/>
+          </StringArray>
+        </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldNome">
+    <Component class="javax.swing.JTextField" name="jTextFieldPesquisar">
     </Component>
     <Component class="javax.swing.JButton" name="jButtonPesquisar">
       <Properties>
         <Property name="text" type="java.lang.String" value="Pesquisar"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jButtonPesquisarFocusGained"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonPesquisarActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPaneTabelaPesquisa">
       <AuxValues>
@@ -118,22 +130,10 @@
         <Component class="javax.swing.JTable" name="jTableTabelaPesquisa">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="3" rowCount="3">
-                <Column editable="false" title="Nome" type="java.lang.Object">
-                  <Data value="Spring"/>
-                  <Data value="Angular"/>
-                  <Data value="PostgreSQL"/>
-                </Column>
-                <Column editable="false" title="Descri&#xe7;&#xe3;o" type="java.lang.Object">
-                  <Data value="Framework Java"/>
-                  <Data value="Framework TypeScript"/>
-                  <Data value="SGBD"/>
-                </Column>
-                <Column editable="false" title="Categoria" type="java.lang.Object">
-                  <Data value="Backend"/>
-                  <Data value="Frotnend"/>
-                  <Data value="Banco"/>
-                </Column>
+              <Table columnCount="3" rowCount="0">
+                <Column editable="false" title="Nome" type="java.lang.Object"/>
+                <Column editable="false" title="Descri&#xe7;&#xe3;o" type="java.lang.Object"/>
+                <Column editable="false" title="Categoria" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">

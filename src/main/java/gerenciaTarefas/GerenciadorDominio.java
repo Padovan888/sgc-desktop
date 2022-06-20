@@ -8,6 +8,7 @@ import dominio.Colaborador;
 import dominio.Competencia;
 import dominio.Turma;
 import dominio.TurmaColaboradorCompetencia;
+import java.sql.SQLException;
 import java.util.List;
 
 public class GerenciadorDominio {
@@ -24,15 +25,22 @@ public class GerenciadorDominio {
     }
 
     public void inserirCompetencia(Competencia novaCompetencia) {
-//        Competencia competencia = new Competencia();
-//        competencia.setNome(novaCompetencia.getNome());
-//        competencia.setDescricao(novaCompetencia.getDescricao());
-//        competencia.setCategoria(novaCompetencia.getCategoria());
         this.competenciaDAO.inserir(novaCompetencia);
     }
 
     public List<Competencia> listarCompetencias() {
         return this.competenciaDAO.listarCompetencias();
+    }
+
+    public List<Competencia> pesquisarCompetencia(String pesquisa, int tipo) throws ClassNotFoundException, SQLException {
+        switch (tipo) {
+            case 0:
+                return this.competenciaDAO.pesquisarPorNome(pesquisa);
+            case 1:
+                return this.competenciaDAO.pesquisarPorCategoria(pesquisa);
+            default:
+                return null;
+        }
     }
 
     public void inserirColaborador(Colaborador novoColaborador) {

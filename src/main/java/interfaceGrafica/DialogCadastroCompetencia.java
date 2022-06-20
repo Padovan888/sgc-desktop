@@ -3,6 +3,7 @@ package interfaceGrafica;
 import dominio.Competencia;
 import gerenciaTarefas.GerenciadorInterfaceGrafica;
 import java.awt.Color;
+import java.awt.Cursor;
 import javax.swing.JOptionPane;
 
 public class DialogCadastroCompetencia extends javax.swing.JDialog {
@@ -19,12 +20,16 @@ public class DialogCadastroCompetencia extends javax.swing.JDialog {
         this.jTextFieldDescricao.setText("");
     }
 
-    public boolean validarCampos() {
-        String mensagemErro = "";
-
+    public void labelsComCorPadrao() {
         this.jLabelNome.setForeground(Color.black);
         this.jLabelDescricao.setForeground(Color.black);
         this.jLabelCategoria.setForeground(Color.black);
+    }
+
+    public boolean validarCampos() {
+        String mensagemErro = "";
+
+        labelsComCorPadrao();
 
         if (this.jTextFieldNome.getText().isEmpty()) {
             mensagemErro = mensagemErro + "Insira um nome.\n";
@@ -48,6 +53,14 @@ public class DialogCadastroCompetencia extends javax.swing.JDialog {
 
         JOptionPane.showMessageDialog(this, mensagemErro, "Erro ao cadastrar a competência", JOptionPane.ERROR_MESSAGE);
         return false;
+    }
+
+    public Competencia novaCompetencia() {
+        Competencia competencia = new Competencia();
+        competencia.setNome(this.jTextFieldNome.getText());
+        competencia.setDescricao(this.jTextFieldDescricao.getText());
+        competencia.setCategoria(this.jComboBoxCategoria.getSelectedItem().toString());
+        return competencia;
     }
 
     @SuppressWarnings("unchecked")
@@ -81,6 +94,11 @@ public class DialogCadastroCompetencia extends javax.swing.JDialog {
         jComboBoxCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Backend", "Frontend", "Banco", "Arquitetura", "Metodologia Ágil", "Testes", "Devops", "Liderança" }));
 
         jButtonCadastrar.setText("Cadastrar");
+        jButtonCadastrar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jButtonCadastrarFocusGained(evt);
+            }
+        });
         jButtonCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCadastrarActionPerformed(evt);
@@ -88,8 +106,18 @@ public class DialogCadastroCompetencia extends javax.swing.JDialog {
         });
 
         jButtonEditar.setText("Editar");
+        jButtonEditar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jButtonEditarFocusGained(evt);
+            }
+        });
 
         jButtonPesquisar.setText("Pesquisar");
+        jButtonPesquisar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jButtonPesquisarFocusGained(evt);
+            }
+        });
         jButtonPesquisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPesquisarActionPerformed(evt);
@@ -166,14 +194,23 @@ public class DialogCadastroCompetencia extends javax.swing.JDialog {
 
     private void jButtonCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCadastrarActionPerformed
         if (validarCampos()) {
-            Competencia competencia = new Competencia();
-            competencia.setNome(this.jTextFieldNome.getText());
-            competencia.setDescricao(this.jTextFieldDescricao.getText());
-            competencia.setCategoria(this.jComboBoxCategoria.getSelectedItem().toString());
+            Competencia competencia = novaCompetencia();
             this.gerenciadorInterfaceGrafica.getGerenciadorDominio().inserirCompetencia(competencia);
             limparCampos();
         }
     }//GEN-LAST:event_jButtonCadastrarActionPerformed
+
+    private void jButtonCadastrarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jButtonCadastrarFocusGained
+        this.jButtonCadastrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jButtonCadastrarFocusGained
+
+    private void jButtonEditarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jButtonEditarFocusGained
+        this.jButtonEditar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jButtonEditarFocusGained
+
+    private void jButtonPesquisarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jButtonPesquisarFocusGained
+        this.jButtonPesquisar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jButtonPesquisarFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCadastrar;

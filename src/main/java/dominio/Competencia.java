@@ -2,6 +2,7 @@ package dominio;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class Competencia implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCompetencia;
 
-    @Column(name="nome", nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
     @Column(name = "descricao", nullable = false)
@@ -20,6 +21,14 @@ public class Competencia implements Serializable {
 
     @Column(name = "categoria", nullable = false)
     private String categoria;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "ColaboradorCompetencia", joinColumns
+            = {
+                @JoinColumn(name = "idCompetencia")}, inverseJoinColumns
+            = {
+                @JoinColumn(name = "idColaborador")})
+    List<Colaborador> colaboradores = new ArrayList<>();
 
     public Competencia() {
     }
@@ -67,5 +76,9 @@ public class Competencia implements Serializable {
     public String toString() {
         return this.getNome();
     }
-    
+
+    public Object[] toArray() throws ParseException {
+        return new Object[]{this, this.getDescricao(), this.getCategoria()};
+    }
+
 }
