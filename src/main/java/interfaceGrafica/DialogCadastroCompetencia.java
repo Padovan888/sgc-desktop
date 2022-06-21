@@ -275,6 +275,7 @@ public class DialogCadastroCompetencia extends javax.swing.JDialog {
             this.gerenciadorInterfaceGrafica.getGerenciadorDominio()
                     .alterarCompetencia(atualizarCompetenciaEditar());
             limparCampos();
+            this.setVisible(false);
         }
     }//GEN-LAST:event_jButtonEditarActionPerformed
 

@@ -18,8 +18,11 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
 
     private GerenciadorInterfaceGrafica gerenciadorInterfaceGrafica;
 
+    private Colaborador colaboradorEditar;
+
     public DialogCadastroColaborador(java.awt.Frame parent, boolean modal, GerenciadorInterfaceGrafica gerenciador) {
         gerenciadorInterfaceGrafica = gerenciador;
+        colaboradorEditar = null;
         initComponents();
     }
 
@@ -105,6 +108,77 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
         ((DefaultTableModel) this.jTableTabelaCompetencias.getModel()).setRowCount(0);
     }
 
+    public void visibilidadeBotoes() {
+        if (this.colaboradorEditar != null) {
+            this.jButtonEditar.setVisible(true);
+            this.jButtonCadastrar.setVisible(false);
+            return;
+        }
+
+        this.jButtonEditar.setVisible(false);
+        this.jButtonCadastrar.setVisible(true);
+    }
+
+    public void preencherComboBoxSenioridadeEditar(String senioridade) {
+        if (senioridade.equals("Estagiário")) {
+            this.jComboBoxSenioridade.setSelectedIndex(0);
+        }
+
+        if (senioridade.equals("Júnior")) {
+            this.jComboBoxSenioridade.setSelectedIndex(1);
+        }
+
+        if (senioridade.equals("Pleno")) {
+            this.jComboBoxSenioridade.setSelectedIndex(2);
+        }
+
+        if (senioridade.equals("Sênior")) {
+            this.jComboBoxSenioridade.setSelectedIndex(3);
+        }
+    }
+
+    public void preencherCamposColaboradorEditar() throws ParseException {
+        if (this.colaboradorEditar != null) {
+            this.jTextFieldNome.setText(this.colaboradorEditar.getNome());
+            this.jFormattedTextFieldCpf.setText(this.colaboradorEditar.getCpf());
+            this.jTextFieldEmail.setText(this.colaboradorEditar.getEmail());
+            this.jFormattedTextFieldDataDeNascimento.setText(Util.dateToStr(this.colaboradorEditar.getDataNascimento()));
+            this.preencherComboBoxSenioridadeEditar(this.colaboradorEditar.getSenioridade());
+            this.jFormattedTextFieldDataDeAdmissao.setText(Util.dateToStr(this.colaboradorEditar.getDataAdmissao()));
+            List<Competencia> competencias = this.colaboradorEditar.getCompetencias();
+            for (Competencia competencia : competencias) {
+                this.inserirCompetenciaTabela(competencia);
+            }
+        }
+    }
+
+    public Colaborador atualizarColaboradorEditar() {
+        Colaborador colaborador = this.colaboradorEditar;
+        colaborador.setNome(this.colaboradorEditar.getNome());
+        String cpfSomenteNumeros = Util.retirarFormacaoCpf(this.jFormattedTextFieldCpf.getText());
+        colaborador.setCpf(cpfSomenteNumeros);
+        colaborador.setEmail(this.jTextFieldEmail.getText());
+        colaborador.setSenioridade(this.jComboBoxSenioridade.getSelectedItem().toString());
+        List<Competencia> competencias = new ArrayList<Competencia>();
+        for (int i = 0; i < this.jTableTabelaCompetencias.getRowCount(); i++) {
+            Competencia competenciaSelecionada = new Competencia();
+            competenciaSelecionada = (Competencia) this.jTableTabelaCompetencias.getValueAt(i, 0);
+            competencias.add(competenciaSelecionada);
+        }
+        colaborador.setCompetencias(competencias);
+        Date dataNascimento = new Date();
+        Date dataAdmissao = new Date();
+        try {
+            dataNascimento = Util.strToDate(this.jFormattedTextFieldDataDeNascimento.getText());
+            dataAdmissao = Util.strToDate(this.jFormattedTextFieldDataDeAdmissao.getText());
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar datas. Erro: " + ex, "Erro no formato de data", ERROR);
+        }
+        colaborador.setDataNascimento(dataNascimento);
+        colaborador.setDataAdmissao(dataAdmissao);
+        return colaborador;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -132,7 +206,6 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
         jTableTabelaCompetencias = new javax.swing.JTable();
         jButtonCadastrar = new javax.swing.JButton();
         jButtonEditar = new javax.swing.JButton();
-        jButtonPesquisar = new javax.swing.JButton();
 
         jMenuItemExcluir.setText("Excluir");
         jMenuItemExcluir.addActionListener(new java.awt.event.ActionListener() {
@@ -149,6 +222,9 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
             }
         });
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
@@ -231,13 +307,6 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
 
         jButtonEditar.setText("Editar");
 
-        jButtonPesquisar.setText("Pesquisar");
-        jButtonPesquisar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonPesquisarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -282,22 +351,14 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
                         .addContainerGap(43, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabelTitulo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonPesquisar)
-                        .addGap(75, 75, 75))))
+                        .addGap(75, 264, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(jLabelTitulo)
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButtonPesquisar)
-                        .addGap(2, 2, 2)))
+                .addGap(23, 23, 23)
+                .addComponent(jLabelTitulo)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelNome)
                     .addComponent(jLabelCpf))
@@ -341,10 +402,6 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPesquisarActionPerformed
-        gerenciadorInterfaceGrafica.abrirPesquisaColaborador();
-    }//GEN-LAST:event_jButtonPesquisarActionPerformed
-
     private void jButtonAdicionarCompetenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarCompetenciaActionPerformed
         if (this.jComboBoxCompetencias.getSelectedItem() == null) {
             JOptionPane.showMessageDialog(this, "Selecione uma competência");
@@ -387,6 +444,17 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         carregarComboBoxCompetencias();
+        this.colaboradorEditar = null;
+        if (this.gerenciadorInterfaceGrafica.getPesquisarColaborador() != null) {
+            this.colaboradorEditar = this.gerenciadorInterfaceGrafica.getColaboradorPesquisaColaborador();
+        }
+        this.visibilidadeBotoes();
+        try {
+            this.preencherCamposColaboradorEditar();
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar competência. Erro: " + ex,
+                    "Erro ao carregar dados na tela de cadastro", ERROR);
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -402,11 +470,15 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
         JOptionPane.showMessageDialog(this, "Selecione uma linha");
     }//GEN-LAST:event_jMenuItemExcluirActionPerformed
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        this.colaboradorEditar = null;
+        this.limparCampos();
+    }//GEN-LAST:event_formWindowClosed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdicionarCompetencia;
     private javax.swing.JButton jButtonCadastrar;
     private javax.swing.JButton jButtonEditar;
-    private javax.swing.JButton jButtonPesquisar;
     private javax.swing.JComboBox<Competencia> jComboBoxCompetencias;
     private javax.swing.JComboBox<String> jComboBoxSenioridade;
     private javax.swing.JFormattedTextField jFormattedTextFieldCpf;
