@@ -10,44 +10,45 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class DialogPesquisarColaborador extends javax.swing.JDialog {
-    
+
     private GerenciadorInterfaceGrafica gerenciadorInterfaceGrafica;
-    
+
     private Colaborador colaboradorSelecionado;
-    
+
     public DialogPesquisarColaborador(java.awt.Frame parent, boolean modal, GerenciadorInterfaceGrafica gerenciador) {
         super(parent, modal);
         initComponents();
         gerenciadorInterfaceGrafica = gerenciador;
         this.colaboradorSelecionado = null;
     }
-    
+
     public Colaborador getColaboradorSelecionado() {
         return colaboradorSelecionado;
     }
-    
+
     public void setColaboradorSelecionado(Colaborador colaboradorSelecionado) {
         this.colaboradorSelecionado = colaboradorSelecionado;
     }
-    
+
     public void excluirLinhasTabela() {
         ((DefaultTableModel) this.jTableTabelaPesquisa.getModel()).setRowCount(0);
     }
-    
+
     public void converterFormatoData() throws ParseException {
         int quantidadeLinhas = this.jTableTabelaPesquisa.getRowCount();
-        
+
         for (int i = 0; i < quantidadeLinhas; i++) {
             String dataConvertida;
             dataConvertida = Util.dateToStr((Date) this.jTableTabelaPesquisa.getValueAt(i, 2));
             this.jTableTabelaPesquisa.setValueAt(dataConvertida, i, 2);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -71,6 +72,11 @@ public class DialogPesquisarColaborador extends javax.swing.JDialog {
         jPopupMenuOpcoesTabela.add(jMenuItemEditar);
 
         jMenuItemExcluir.setText("Excluir");
+        jMenuItemExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExcluirActionPerformed(evt);
+            }
+        });
         jPopupMenuOpcoesTabela.add(jMenuItemExcluir);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -167,13 +173,13 @@ public class DialogPesquisarColaborador extends javax.swing.JDialog {
                         .pesquisarColaborador(this.jTextFieldTextoPesquisa.getText(),
                                 this.jComboBoxTipoPesquisa.getSelectedIndex());
             }
-            
+
             this.excluirLinhasTabela();
-            
+
             for (Colaborador colaborador : colaboradores) {
                 ((DefaultTableModel) this.jTableTabelaPesquisa.getModel()).addRow(colaborador.toArray());
             }
-            
+
             this.converterFormatoData();
         } catch (ClassNotFoundException | SQLException | ParseException ex) {
             JOptionPane.showMessageDialog(this, "Erro ao pesquisar competência. Erro: " + ex,
@@ -194,7 +200,7 @@ public class DialogPesquisarColaborador extends javax.swing.JDialog {
             this.setVisible(false);
             return;
         }
-        
+
         JOptionPane.showMessageDialog(this, "Selecione um colaborador !");
     }//GEN-LAST:event_jMenuItemEditarActionPerformed
 
@@ -207,6 +213,27 @@ public class DialogPesquisarColaborador extends javax.swing.JDialog {
     private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
         this.setColaboradorSelecionado(null);
     }//GEN-LAST:event_formComponentHidden
+
+    private void jMenuItemExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExcluirActionPerformed
+        int linha;
+        linha = this.jTableTabelaPesquisa.getSelectedRow();
+
+        if (linha >= 0) {
+            Colaborador colaborador = (Colaborador) this.jTableTabelaPesquisa.getValueAt(linha, 0);
+            try {
+                this.gerenciadorInterfaceGrafica.getGerenciadorDominio().excluirColaborador(colaborador);
+                ((DefaultTableModel) this.jTableTabelaPesquisa.getModel()).removeRow(linha);
+            } catch (ClassNotFoundException | SQLException | PersistenceException ex) {
+                JOptionPane.showMessageDialog(this, "Verifique se o colaborador possui competências"
+                        + "vinculadas. Erro: " + ex, "Erro no processo de exclusão", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            JOptionPane.showMessageDialog(this, "Colaborador removido com sucesso !");
+            return;
+        }
+
+        JOptionPane.showMessageDialog(this, "Selecione um colaborador");
+    }//GEN-LAST:event_jMenuItemExcluirActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonPesquisar;

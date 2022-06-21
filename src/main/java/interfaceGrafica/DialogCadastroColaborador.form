@@ -51,55 +51,48 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="jComboBoxSenioridade" alignment="0" pref="153" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="jComboBoxSenioridade" alignment="0" pref="153" max="32767" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                              <Component id="jTextFieldEmail" alignment="0" pref="153" max="32767" attributes="0"/>
-                                              <Component id="jLabelNome" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jTextFieldNome" alignment="0" max="32767" attributes="0"/>
-                                          </Group>
-                                          <Component id="jLabelEmail" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="jTextFieldEmail" alignment="0" pref="153" max="32767" attributes="0"/>
+                                      <Component id="jLabelNome" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextFieldNome" alignment="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <Component id="jLabelSenioridade" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jLabelDataDeAdmissao" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabelDataDeNascimento" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jFormattedTextFieldCpf" pref="153" max="32767" attributes="0"/>
-                                      <Component id="jFormattedTextFieldDataDeNascimento" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jFormattedTextFieldDataDeAdmissao" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="jLabelCpf" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabelEmail" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabelCompetencias" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                              <Component id="jComboBoxCompetencias" min="-2" pref="120" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                              <Component id="jButtonAdicionarCompetencia" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jPanelTabelaCompetencias" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
-                              <Component id="jButtonCadastrar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-                              <Component id="jButtonEditar" min="-2" pref="81" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jLabelSenioridade" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="43" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jLabelDataDeAdmissao" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelDataDeNascimento" min="-2" max="-2" attributes="0"/>
+                              <Component id="jFormattedTextFieldCpf" pref="153" max="32767" attributes="0"/>
+                              <Component id="jFormattedTextFieldDataDeNascimento" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jFormattedTextFieldDataDeAdmissao" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="jLabelCpf" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jLabelTitulo" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="75" pref="264" max="32767" attributes="0"/>
+                      <Component id="jLabelCompetencias" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                      <Component id="jComboBoxCompetencias" min="-2" pref="120" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                      <Component id="jButtonAdicionarCompetencia" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jPanelTabelaCompetencias" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
+                      <Component id="jButtonCadastrar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                      <Component id="jButtonEditar" min="-2" pref="81" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="jLabelTitulo" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace pref="43" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -317,6 +310,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Editar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEditarActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

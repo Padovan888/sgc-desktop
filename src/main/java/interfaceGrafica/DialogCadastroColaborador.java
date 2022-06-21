@@ -79,8 +79,13 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
             this.jLabelDataDeAdmissao.setForeground(Color.red);
         }
 
-        if (mensagemErro.isEmpty()) {
+        if (mensagemErro.isEmpty() && this.colaboradorEditar == null) {
             JOptionPane.showMessageDialog(this, "Colaborador criado com sucesso!");
+            return true;
+        }
+
+        if (mensagemErro.isEmpty() && this.colaboradorEditar != null) {
+            JOptionPane.showMessageDialog(this, "Colaborador editado com sucesso!");
             return true;
         }
 
@@ -154,7 +159,7 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
 
     public Colaborador atualizarColaboradorEditar() {
         Colaborador colaborador = this.colaboradorEditar;
-        colaborador.setNome(this.colaboradorEditar.getNome());
+        colaborador.setNome(this.jTextFieldNome.getText());
         String cpfSomenteNumeros = Util.retirarFormacaoCpf(this.jFormattedTextFieldCpf.getText());
         colaborador.setCpf(cpfSomenteNumeros);
         colaborador.setEmail(this.jTextFieldEmail.getText());
@@ -306,6 +311,11 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
         });
 
         jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -474,6 +484,15 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
         this.colaboradorEditar = null;
         this.limparCampos();
     }//GEN-LAST:event_formWindowClosed
+
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        if (validarCampos()) {
+            this.gerenciadorInterfaceGrafica.getGerenciadorDominio()
+                    .alterarColaborador(atualizarColaboradorEditar());
+            limparCampos();
+            this.setVisible(false);
+        }
+    }//GEN-LAST:event_jButtonEditarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdicionarCompetencia;

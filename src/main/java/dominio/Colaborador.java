@@ -34,7 +34,7 @@ public class Colaborador implements Serializable {
     @Column(name = "senioridade", nullable = false)
     private String senioridade;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ColaboradorCompetencia", joinColumns
             = {
                 @JoinColumn(name = "idColaborador")}, inverseJoinColumns

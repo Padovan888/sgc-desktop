@@ -1,5 +1,6 @@
 dominio\TurmaColaboradorCompetencia.class
 interfaceGrafica\DialogCadastroTurma$1.class
+interfaceGrafica\DialogPesquisarColaborador$6.class
 dominio\Competencia.class
 interfaceGrafica\FramePrincipal$1.class
 interfaceGrafica\FramePrincipal$4.class

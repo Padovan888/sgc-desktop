@@ -22,7 +22,7 @@ public class Competencia implements Serializable {
     @Column(name = "categoria", nullable = false)
     private String categoria;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ColaboradorCompetencia", joinColumns
             = {
                 @JoinColumn(name = "idCompetencia")}, inverseJoinColumns
