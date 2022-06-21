@@ -64,5 +64,5 @@ public class CompetenciaDAO extends GenericDAO {
     public List<Competencia> pesquisarPorCategoria(String categoria) throws ClassNotFoundException, SQLException {
         return pesquisar(categoria, 2);
     }
-
+    
 }

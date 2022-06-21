@@ -1,6 +1,6 @@
-
 package gerenciaTarefas;
 
+import dominio.Competencia;
 import interfaceGrafica.DialogCadastroColaborador;
 import interfaceGrafica.DialogCadastroCompetencia;
 import interfaceGrafica.DialogCadastroTurma;
@@ -14,7 +14,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 public class GerenciadorInterfaceGrafica {
-    
+
     private FramePrincipal principal;
     private DialogCadastroCompetencia cadastroCompetencia;
     private DialogCadastroColaborador cadastroColaborador;
@@ -22,7 +22,7 @@ public class GerenciadorInterfaceGrafica {
     private DialogPesquisarCompetencia pesquisarCompetencia;
     private DialogPesquisarColaborador pesquisarColaborador;
     private DialogPesquisarTurma pesquisarTurma;
-    
+
     GerenciadorDominio gerenciadorDominio;
 
     public GerenciadorInterfaceGrafica() {
@@ -35,54 +35,62 @@ public class GerenciadorInterfaceGrafica {
         pesquisarColaborador = null;
         pesquisarTurma = null;
     }
-    
-    private JDialog abrirJanela(java.awt.Frame parent, JDialog dlg, Class classe){
-        if (dlg == null){     
+
+    private JDialog abrirJanela(java.awt.Frame parent, JDialog dlg, Class classe) {
+        if (dlg == null) {
             try {
-                dlg = (JDialog) classe.getConstructor(Frame.class, boolean.class, GerenciadorInterfaceGrafica.class ).newInstance(parent,true,this);
+                dlg = (JDialog) classe.getConstructor(Frame.class, boolean.class, GerenciadorInterfaceGrafica.class).newInstance(parent, true, this);
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                JOptionPane.showMessageDialog(principal, "Erro ao abrir a janela " + classe.getName() );
+                JOptionPane.showMessageDialog(principal, "Erro ao abrir a janela " + classe.getName());
             }
-        }        
-        dlg.setVisible(true); 
+        }
+        dlg.setVisible(true);
         return dlg;
     }
-    
-    public void abrirJanelaPrincipal(){
-        if(principal == null){
+
+    public void abrirJanelaPrincipal() {
+        if (principal == null) {
             principal = new FramePrincipal(this);
         }
         principal.setVisible(true);
     }
-    
-    public void abrirCadastroCompetencia(){
+
+    public void abrirCadastroCompetencia() {
         cadastroCompetencia = (DialogCadastroCompetencia) abrirJanela(principal, cadastroCompetencia, DialogCadastroCompetencia.class);
     }
-    
-    public void abrirCadastroColaborador(){
+
+    public Competencia getCompetenciaPesquisaCompetencia() {
+        return this.pesquisarCompetencia.getCompetenciaSelecionada();
+    }
+
+    public DialogPesquisarCompetencia getPesquisarCompetencia() {
+        return pesquisarCompetencia;
+    }
+
+    public void abrirCadastroColaborador() {
         cadastroColaborador = (DialogCadastroColaborador) abrirJanela(principal, cadastroColaborador, DialogCadastroColaborador.class);
     }
-    
-    public void abrirCadastroTurma(){
+
+    public void abrirCadastroTurma() {
         cadastroTurma = (DialogCadastroTurma) abrirJanela(principal, cadastroTurma, DialogCadastroTurma.class);
     }
-    
-    public void abrirPesquisaCompetencia(){
+
+    public void abrirPesquisaCompetencia() {
         pesquisarCompetencia = (DialogPesquisarCompetencia) abrirJanela(principal, pesquisarCompetencia, DialogPesquisarCompetencia.class);
     }
-    
-    public void abrirPesquisaColaborador(){
+
+    public void abrirPesquisaColaborador() {
         pesquisarColaborador = (DialogPesquisarColaborador) abrirJanela(principal, pesquisarColaborador, DialogPesquisarColaborador.class);
     }
-    
-    public void abrirPesquisaTurma(){
+
+    public void abrirPesquisaTurma() {
         pesquisarTurma = (DialogPesquisarTurma) abrirJanela(principal, pesquisarTurma, DialogPesquisarTurma.class);
     }
 
     public GerenciadorDominio getGerenciadorDominio() {
         return gerenciadorDominio;
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -119,5 +127,5 @@ public class GerenciadorInterfaceGrafica {
             }
         });
     }
-    
+
 }

@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
+import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -21,6 +22,14 @@ public class DialogPesquisarCompetencia extends javax.swing.JDialog {
         this.competenciaSelecionada = null;
     }
 
+    public Competencia getCompetenciaSelecionada() {
+        return competenciaSelecionada;
+    }
+
+    public void setCompetenciaSelecionada(Competencia competenciaSelecionada) {
+        this.competenciaSelecionada = competenciaSelecionada;
+    }
+
     private void excluirLinhasTabela() {
         ((DefaultTableModel) this.jTableTabelaPesquisa.getModel()).setRowCount(0);
     }
@@ -30,8 +39,8 @@ public class DialogPesquisarCompetencia extends javax.swing.JDialog {
     private void initComponents() {
 
         jPopupMenuOpcoesTabela = new javax.swing.JPopupMenu();
-        jMenuEditar = new javax.swing.JMenu();
-        jMenuExcluir = new javax.swing.JMenu();
+        jMenuItemEditar = new javax.swing.JMenuItem();
+        jMenuItemExcluir = new javax.swing.JMenuItem();
         jLabelTitulo = new javax.swing.JLabel();
         jComboBoxTipoPesquisa = new javax.swing.JComboBox<>();
         jTextFieldPesquisar = new javax.swing.JTextField();
@@ -39,15 +48,33 @@ public class DialogPesquisarCompetencia extends javax.swing.JDialog {
         jScrollPaneTabelaPesquisa = new javax.swing.JScrollPane();
         jTableTabelaPesquisa = new javax.swing.JTable();
 
-        jMenuEditar.setText("Editar");
-        jPopupMenuOpcoesTabela.add(jMenuEditar);
+        jMenuItemEditar.setText("Editar");
+        jMenuItemEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEditarActionPerformed(evt);
+            }
+        });
+        jPopupMenuOpcoesTabela.add(jMenuItemEditar);
 
-        jMenuExcluir.setText("Excluir");
-        jPopupMenuOpcoesTabela.add(jMenuExcluir);
+        jMenuItemExcluir.setText("Excluir");
+        jMenuItemExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExcluirActionPerformed(evt);
+            }
+        });
+        jPopupMenuOpcoesTabela.add(jMenuItemExcluir);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisar Competência");
         setResizable(false);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                formComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         jLabelTitulo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelTitulo.setText("Pesquisar Competência");
@@ -131,8 +158,13 @@ public class DialogPesquisarCompetencia extends javax.swing.JDialog {
     private void jButtonPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPesquisarActionPerformed
         List<Competencia> competencias;
         try {
-            competencias = this.gerenciadorInterfaceGrafica.getGerenciadorDominio()
-                    .pesquisarCompetencia(this.jTextFieldPesquisar.getText(), this.jComboBoxTipoPesquisa.getSelectedIndex());
+            if (this.jTextFieldPesquisar.getText().equals("")) {
+                competencias = this.gerenciadorInterfaceGrafica.getGerenciadorDominio().listarCompetencias();
+            } else {
+                competencias = this.gerenciadorInterfaceGrafica.getGerenciadorDominio()
+                        .pesquisarCompetencia(this.jTextFieldPesquisar.getText(),
+                                this.jComboBoxTipoPesquisa.getSelectedIndex());
+            }
 
             this.excluirLinhasTabela();
 
@@ -145,12 +177,55 @@ public class DialogPesquisarCompetencia extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButtonPesquisarActionPerformed
 
+    private void jMenuItemEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEditarActionPerformed
+        int linha;
+        linha = this.jTableTabelaPesquisa.getSelectedRow();
+        if (linha >= 0) {
+            this.competenciaSelecionada = (Competencia) this.jTableTabelaPesquisa.getValueAt(linha, 0);
+            this.gerenciadorInterfaceGrafica.abrirCadastroCompetencia();
+            this.setVisible(false);
+            return;
+        }
+        JOptionPane.showMessageDialog(this, "Selecione uma competência !");
+    }//GEN-LAST:event_jMenuItemEditarActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        this.excluirLinhasTabela();
+        this.jTextFieldPesquisar.setText("");
+        this.competenciaSelecionada = null;
+    }//GEN-LAST:event_formComponentShown
+
+    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
+        this.setCompetenciaSelecionada(null);
+    }//GEN-LAST:event_formComponentHidden
+
+    private void jMenuItemExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExcluirActionPerformed
+        int linha;
+        linha = this.jTableTabelaPesquisa.getSelectedRow();
+
+        if (linha >= 0) {
+            Competencia competencia = (Competencia) this.jTableTabelaPesquisa.getValueAt(linha, 0);
+            try {
+                this.gerenciadorInterfaceGrafica.getGerenciadorDominio().excluirCompetencia(competencia);
+                ((DefaultTableModel) this.jTableTabelaPesquisa.getModel()).removeRow(linha);
+            } catch (ClassNotFoundException | SQLException | PersistenceException ex) {
+                JOptionPane.showMessageDialog(this, "Verifique se a competência se encontra vinculada "
+                        + "a um colaborador. Erro: " + ex, "Erro no processo de exclusão", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            JOptionPane.showMessageDialog(this, "Competência removida com sucesso !");
+            return;
+        }
+
+        JOptionPane.showMessageDialog(this, "Selecione uma competência");
+    }//GEN-LAST:event_jMenuItemExcluirActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonPesquisar;
     private javax.swing.JComboBox<String> jComboBoxTipoPesquisa;
     private javax.swing.JLabel jLabelTitulo;
-    private javax.swing.JMenu jMenuEditar;
-    private javax.swing.JMenu jMenuExcluir;
+    private javax.swing.JMenuItem jMenuItemEditar;
+    private javax.swing.JMenuItem jMenuItemExcluir;
     private javax.swing.JPopupMenu jPopupMenuOpcoesTabela;
     private javax.swing.JScrollPane jScrollPaneTabelaPesquisa;
     private javax.swing.JTable jTableTabelaPesquisa;

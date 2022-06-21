@@ -2,6 +2,7 @@ package dominio;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -117,6 +118,10 @@ public class Colaborador implements Serializable {
     @Override
     public String toString() {
         return this.getNome();
+    }
+
+    public Object[] toArray() throws ParseException {
+        return new Object[]{this, this.getEmail(), this.getDataNascimento(), this.getSenioridade()};
     }
 
 }

@@ -10,6 +10,7 @@ import dominio.Turma;
 import dominio.TurmaColaboradorCompetencia;
 import java.sql.SQLException;
 import java.util.List;
+import javax.persistence.PersistenceException;
 
 public class GerenciadorDominio {
 
@@ -24,8 +25,8 @@ public class GerenciadorDominio {
         this.colaboradorDAO = new ColaboradorDAO();
     }
 
-    public void inserirCompetencia(Competencia novaCompetencia) {
-        this.competenciaDAO.inserir(novaCompetencia);
+    public void inserirCompetencia(Competencia competencia) {
+        this.competenciaDAO.inserir(competencia);
     }
 
     public List<Competencia> listarCompetencias() {
@@ -43,6 +44,14 @@ public class GerenciadorDominio {
         }
     }
 
+    public void alterarCompetencia(Competencia competencia) {
+        this.competenciaDAO.alterar(competencia);
+    }
+
+    public void excluirCompetencia(Competencia competencia) throws ClassNotFoundException, SQLException, PersistenceException {
+        this.competenciaDAO.excluir(competencia);
+    }
+
     public void inserirColaborador(Colaborador novoColaborador) {
         Colaborador colaborador = new Colaborador();
         colaborador.setNome(novoColaborador.getNome());
@@ -57,6 +66,25 @@ public class GerenciadorDominio {
 
     public List<Colaborador> listarColaboradores() {
         return this.colaboradorDAO.listarColaboradores();
+    }
+
+    public List<Colaborador> pesquisarColaborador(String pesquisa, int tipo) throws ClassNotFoundException, SQLException {
+        switch (tipo) {
+            case 0:
+                return this.colaboradorDAO.pesquisarPorNome(pesquisa);
+            case 1:
+                return this.colaboradorDAO.pesquisarPorSenioridade(pesquisa);
+            default:
+                return null;
+        }
+    }
+
+    public void alterarColaborador(Colaborador colaborador) {
+        this.colaboradorDAO.alterar(colaborador);
+    }
+
+    public void excluirColaborador(Colaborador colaborador) throws ClassNotFoundException, SQLException, PersistenceException {
+        this.colaboradorDAO.excluir(colaborador);
     }
 
     public int inserirTurma(Turma novaTurma) {
