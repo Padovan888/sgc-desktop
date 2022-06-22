@@ -28,6 +28,8 @@ public class CompetenciaDAO extends GenericDAO {
             CriteriaBuilder builder = sessao.getCriteriaBuilder();
             CriteriaQuery consulta = builder.createQuery(Competencia.class);
 
+            consulta.distinct(true);
+
             Root tabela = consulta.from(Competencia.class);
 
             Predicate restricoes = null;
@@ -64,5 +66,5 @@ public class CompetenciaDAO extends GenericDAO {
     public List<Competencia> pesquisarPorCategoria(String categoria) throws ClassNotFoundException, SQLException {
         return pesquisar(categoria, 2);
     }
-    
+
 }

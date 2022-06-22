@@ -4,7 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Competencia implements Serializable {
@@ -23,12 +25,12 @@ public class Competencia implements Serializable {
     private String categoria;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "ColaboradorCompetencia", joinColumns
+    @JoinTable(name = "colaboradorcompetencia", joinColumns
             = {
                 @JoinColumn(name = "idCompetencia")}, inverseJoinColumns
             = {
                 @JoinColumn(name = "idColaborador")})
-    List<Colaborador> colaboradores = new ArrayList<>();
+    private List<Colaborador> colaboradores = new ArrayList<Colaborador>();
 
     public Competencia() {
     }
@@ -56,6 +58,10 @@ public class Competencia implements Serializable {
         return categoria;
     }
 
+    public List<Colaborador> getColaboradores() {
+        return colaboradores;
+    }
+
     public void setIdCompetencia(Integer id) {
         this.idCompetencia = idCompetencia;
     }
@@ -70,6 +76,10 @@ public class Competencia implements Serializable {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public void setColaboradores(List<Colaborador> colaboradores) {
+        this.colaboradores = colaboradores;
     }
 
     @Override

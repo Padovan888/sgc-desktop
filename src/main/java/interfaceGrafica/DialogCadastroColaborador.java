@@ -221,6 +221,7 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
         jPopupMenuTabelaCompetencias.add(jMenuItemExcluir);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastrar Colaborador");
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
@@ -326,42 +327,38 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jComboBoxSenioridade, javax.swing.GroupLayout.Alignment.LEADING, 0, 153, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jComboBoxSenioridade, javax.swing.GroupLayout.Alignment.LEADING, 0, 153, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(jTextFieldEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                                                .addComponent(jLabelNome, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jTextFieldNome, javax.swing.GroupLayout.Alignment.LEADING))
-                                            .addComponent(jLabelEmail)))
-                                    .addComponent(jLabelSenioridade))
-                                .addGap(53, 53, 53)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabelDataDeAdmissao)
-                                        .addComponent(jLabelDataDeNascimento)
-                                        .addComponent(jFormattedTextFieldCpf, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                                        .addComponent(jFormattedTextFieldDataDeNascimento)
-                                        .addComponent(jFormattedTextFieldDataDeAdmissao))
-                                    .addComponent(jLabelCpf)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelCompetencias)
-                                .addGap(38, 38, 38)
-                                .addComponent(jComboBoxCompetencias, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(61, 61, 61)
-                                .addComponent(jButtonAdicionarCompetencia))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanelTabelaCompetencias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(78, 78, 78)
-                                .addComponent(jButtonCadastrar)
-                                .addGap(48, 48, 48)
-                                .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(43, Short.MAX_VALUE))
+                                        .addComponent(jTextFieldEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                                        .addComponent(jLabelNome, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jTextFieldNome, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addComponent(jLabelEmail)))
+                            .addComponent(jLabelSenioridade))
+                        .addGap(53, 53, 53)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabelDataDeAdmissao)
+                                .addComponent(jLabelDataDeNascimento)
+                                .addComponent(jFormattedTextFieldCpf, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                                .addComponent(jFormattedTextFieldDataDeNascimento)
+                                .addComponent(jFormattedTextFieldDataDeAdmissao))
+                            .addComponent(jLabelCpf)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelTitulo)
-                        .addGap(75, 264, Short.MAX_VALUE))))
+                        .addComponent(jLabelCompetencias)
+                        .addGap(38, 38, 38)
+                        .addComponent(jComboBoxCompetencias, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(61, 61, 61)
+                        .addComponent(jButtonAdicionarCompetencia))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanelTabelaCompetencias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(78, 78, 78)
+                        .addComponent(jButtonCadastrar)
+                        .addGap(48, 48, 48)
+                        .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelTitulo))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -482,6 +479,7 @@ public class DialogCadastroColaborador extends javax.swing.JDialog {
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         this.colaboradorEditar = null;
+        this.jComboBoxCompetencias.removeAllItems();
         this.limparCampos();
     }//GEN-LAST:event_formWindowClosed
 

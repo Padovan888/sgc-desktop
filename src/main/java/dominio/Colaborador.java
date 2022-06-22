@@ -35,12 +35,12 @@ public class Colaborador implements Serializable {
     private String senioridade;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "ColaboradorCompetencia", joinColumns
+    @JoinTable(name = "colaboradorcompetencia", joinColumns
             = {
                 @JoinColumn(name = "idColaborador")}, inverseJoinColumns
             = {
                 @JoinColumn(name = "idCompetencia")})
-    List<Competencia> competencias = new ArrayList<>();
+    private List<Competencia> competencias = new ArrayList<Competencia>();
 
     public Colaborador() {
     }

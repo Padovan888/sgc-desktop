@@ -27,6 +27,8 @@ public class ColaboradorDAO extends GenericDAO {
             CriteriaBuilder builder = sessao.getCriteriaBuilder();
             CriteriaQuery consulta = builder.createQuery(Colaborador.class);
 
+            consulta.distinct(true);
+
             Root tabela = consulta.from(Colaborador.class);
 
             Predicate restricoes = null;

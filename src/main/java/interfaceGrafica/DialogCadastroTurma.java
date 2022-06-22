@@ -12,8 +12,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -100,8 +98,13 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
             this.jLabelStatus.setForeground(Color.red);
         }
 
-        if (mensagemErro.isEmpty()) {
+        if (mensagemErro.isEmpty() && this.turmaEditar == null) {
             JOptionPane.showMessageDialog(this, "Turma criada com sucesso!");
+            return true;
+        }
+
+        if (mensagemErro.isEmpty() && this.turmaEditar != null) {
+            JOptionPane.showMessageDialog(this, "Turma alterada com sucesso!");
             return true;
         }
 
@@ -227,6 +230,11 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
         turma.setDataTermino(dataTermino);
 //        int id = this.gerenciadorInterfaceGrafica.getGerenciadorDominio().inserirTurma(turma);
 //        turma.setIdTurma(id);
+        int quantidadeTurmaColaboradorCompetencia = turma.getTurmaColaboradorCompetencia().size();
+        for (int i = 0; i < quantidadeTurmaColaboradorCompetencia; i++) {
+            this.gerenciadorInterfaceGrafica.getGerenciadorDominio()
+                    .excluirTurmaColaboradorCompetencia(turma.getTurmaColaboradorCompetencia().get(i));
+        }
         List<TurmaColaboradorCompetencia> novaLista = new ArrayList<TurmaColaboradorCompetencia>();
         for (int i = 0; i < this.jTableTabelaColaboradorCompetencia.getRowCount(); i++) {
             TurmaColaboradorCompetencia novoRegistro = new TurmaColaboradorCompetencia();
@@ -238,6 +246,8 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
             novoRegistro.setCargaHoraria((int) this.jTableTabelaColaboradorCompetencia.getValueAt(i, 2));
             novoRegistro.setConteudo((String) this.jTableTabelaColaboradorCompetencia.getValueAt(i, 3));
             novaLista.add(novoRegistro);
+            this.gerenciadorInterfaceGrafica.getGerenciadorDominio()
+                    .inserirTurmaColaboradorCompetencia(novoRegistro);
         }
         turma.setTurmaColaboradorCompetencia(novaLista);
         return turma;
@@ -286,12 +296,16 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
         jPopupMenuTabelaRegistros.add(jMenuItemExcluir);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastrar Turma");
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
             }
         });
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
@@ -386,6 +400,11 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
         });
 
         jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
 
         jLabelCargaHoraria.setText("Carga Horária");
 
@@ -403,11 +422,6 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(126, 126, 126)
-                        .addComponent(jTextFieldDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jFormattedTextFieldDataDeInicio, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelDataDeInicio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -421,9 +435,15 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
                             .addComponent(jComboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelNome)
-                        .addGap(249, 249, 249)
-                        .addComponent(jLabelDescricao)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(126, 126, 126)
+                                .addComponent(jTextFieldDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelNome)
+                                .addGap(249, 249, 249)
+                                .addComponent(jLabelDescricao)))
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
@@ -529,6 +549,17 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
         this.jComboBoxNomeColaborador.removeAllItems();
         carregarComboBoxColaboradores();
         this.jComboBoxNomeColaborador.setSelectedItem(null);
+        this.turmaEditar = null;
+        if (this.gerenciadorInterfaceGrafica.getPesquisarTurma() != null) {
+            this.turmaEditar = this.gerenciadorInterfaceGrafica.getTurmaPesquisaTurma();
+        }
+        this.visibilidadeBotoes();
+        try {
+            this.preencherCamposTurmaEditar();
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar turma. Erro: " + ex,
+                    "Erro ao carregar dados na tela de cadastro", ERROR);
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void jComboBoxNomeColaboradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxNomeColaboradorActionPerformed
@@ -568,7 +599,7 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
                 dataInicio = Util.strToDate(this.jFormattedTextFieldDataDeInicio.getText());
                 dataTermino = Util.strToDate(this.jFormattedTextFieldDataDeTermino.getText());
             } catch (ParseException ex) {
-                Logger.getLogger(DialogCadastroTurma.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Erro ao atualizar datas. Erro: " + ex, "Erro no formato de data", ERROR);
             }
             turma.setDataInicio(dataInicio);
             turma.setDataTermino(dataTermino);
@@ -597,6 +628,22 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
         }
         JOptionPane.showMessageDialog(this, "Selecione uma linha");
     }//GEN-LAST:event_jMenuItemExcluirActionPerformed
+
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        if (this.validarCamposTurma()) {
+            this.gerenciadorInterfaceGrafica.getGerenciadorDominio()
+                    .alterarTurma(atualizarTurmaEditar());
+            this.limparCampos();
+            this.limparCamposAdicionarTabela();
+            this.setVisible(false);
+        }
+    }//GEN-LAST:event_jButtonEditarActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        this.turmaEditar = null;
+        this.limparCampos();
+        this.limparCamposAdicionarTabela();
+    }//GEN-LAST:event_formWindowClosed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdicionarColaboradorCompetencia;

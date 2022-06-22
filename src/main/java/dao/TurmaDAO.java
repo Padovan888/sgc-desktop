@@ -29,6 +29,8 @@ public class TurmaDAO extends GenericDAO {
 
             Root tabela = consulta.from(Turma.class);
 
+            consulta.distinct(true);
+
             Predicate restricoes = null;
             switch (tipo) {
                 case 1:

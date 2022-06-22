@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -21,7 +19,6 @@ public class DialogPesquisarColaborador extends javax.swing.JDialog {
     private Colaborador colaboradorSelecionado;
 
     public DialogPesquisarColaborador(java.awt.Frame parent, boolean modal, GerenciadorInterfaceGrafica gerenciador) {
-        super(parent, modal);
         initComponents();
         gerenciadorInterfaceGrafica = gerenciador;
         this.colaboradorSelecionado = null;
@@ -156,8 +153,8 @@ public class DialogPesquisarColaborador extends javax.swing.JDialog {
                     .addComponent(jTextFieldTextoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonPesquisar))
                 .addGap(31, 31, 31)
-                .addComponent(jScrollPaneTabelaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addComponent(jScrollPaneTabelaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();

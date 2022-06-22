@@ -16,7 +16,6 @@ public class DialogPesquisarCompetencia extends javax.swing.JDialog {
     private Competencia competenciaSelecionada;
 
     public DialogPesquisarCompetencia(java.awt.Frame parent, boolean modal, GerenciadorInterfaceGrafica gerenciador) {
-        super(parent, modal);
         initComponents();
         this.gerenciadorInterfaceGrafica = gerenciador;
         this.competenciaSelecionada = null;
@@ -144,8 +143,8 @@ public class DialogPesquisarCompetencia extends javax.swing.JDialog {
                     .addComponent(jTextFieldPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonPesquisar))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPaneTabelaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addComponent(jScrollPaneTabelaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         pack();

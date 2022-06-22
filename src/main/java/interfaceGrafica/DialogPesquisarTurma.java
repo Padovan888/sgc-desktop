@@ -19,7 +19,6 @@ public class DialogPesquisarTurma extends javax.swing.JDialog {
     private Turma turmaSelecionada;
 
     public DialogPesquisarTurma(java.awt.Frame parent, boolean modal, GerenciadorInterfaceGrafica gerenciador) {
-//        super(parent, modal);
         initComponents();
         gerenciadorInterfaceGrafica = gerenciador;
         this.turmaSelecionada = null;
@@ -55,22 +54,14 @@ public class DialogPesquisarTurma extends javax.swing.JDialog {
     private void initComponents() {
 
         jPopupMenuOpcoesTabela = new javax.swing.JPopupMenu();
-        jMenuItemExcluir = new javax.swing.JMenuItem();
         jMenuItemEditar = new javax.swing.JMenuItem();
+        jMenuItemExcluir = new javax.swing.JMenuItem();
         jLabelTitulo = new javax.swing.JLabel();
         jTextFieldPesquisar = new javax.swing.JTextField();
         jButtonPesquisar = new javax.swing.JButton();
         jScrollPaneTabelaPesquisa = new javax.swing.JScrollPane();
         jTableTabelaPesquisa = new javax.swing.JTable();
         jComboBoxTipoPesquisa = new javax.swing.JComboBox<>();
-
-        jMenuItemExcluir.setText("Excluir");
-        jMenuItemExcluir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemExcluirActionPerformed(evt);
-            }
-        });
-        jPopupMenuOpcoesTabela.add(jMenuItemExcluir);
 
         jMenuItemEditar.setText("Editar");
         jMenuItemEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -80,7 +71,16 @@ public class DialogPesquisarTurma extends javax.swing.JDialog {
         });
         jPopupMenuOpcoesTabela.add(jMenuItemEditar);
 
+        jMenuItemExcluir.setText("Excluir");
+        jMenuItemExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExcluirActionPerformed(evt);
+            }
+        });
+        jPopupMenuOpcoesTabela.add(jMenuItemExcluir);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Pesquisar Turma");
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
                 formComponentHidden(evt);
@@ -138,15 +138,16 @@ public class DialogPesquisarTurma extends javax.swing.JDialog {
                         .addComponent(jLabelTitulo))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPaneTabelaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jComboBoxTipoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextFieldPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonPesquisar)))
+                        .addComponent(jScrollPaneTabelaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(15, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jComboBoxTipoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jTextFieldPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonPesquisar)
+                .addGap(37, 37, 37))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,8 +160,8 @@ public class DialogPesquisarTurma extends javax.swing.JDialog {
                     .addComponent(jButtonPesquisar)
                     .addComponent(jComboBoxTipoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
-                .addComponent(jScrollPaneTabelaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addComponent(jScrollPaneTabelaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();

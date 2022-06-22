@@ -2,6 +2,7 @@ package gerenciaTarefas;
 
 import dominio.Colaborador;
 import dominio.Competencia;
+import dominio.Turma;
 import interfaceGrafica.DialogCadastroColaborador;
 import interfaceGrafica.DialogCadastroCompetencia;
 import interfaceGrafica.DialogCadastroTurma;
@@ -82,6 +83,14 @@ public class GerenciadorInterfaceGrafica {
 
     public void abrirCadastroTurma() {
         cadastroTurma = (DialogCadastroTurma) abrirJanela(principal, cadastroTurma, DialogCadastroTurma.class);
+    }
+
+    public Turma getTurmaPesquisaTurma() {
+        return this.pesquisarTurma.getTurmaSelecionada();
+    }
+
+    public DialogPesquisarTurma getPesquisarTurma() {
+        return pesquisarTurma;
     }
 
     public void abrirPesquisaCompetencia() {
