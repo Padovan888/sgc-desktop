@@ -21,8 +21,11 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
 
     private GerenciadorInterfaceGrafica gerenciadorInterfaceGrafica;
 
+    private Turma turmaEditar;
+
     public DialogCadastroTurma(java.awt.Frame parent, boolean modal, GerenciadorInterfaceGrafica gerenciador) {
         gerenciadorInterfaceGrafica = gerenciador;
+        turmaEditar = null;
         initComponents();
     }
 
@@ -163,6 +166,83 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
         this.jTextAreaConteudo.setText("");
     }
 
+    public void visibilidadeBotoes() {
+        if (this.turmaEditar != null) {
+            this.jButtonEditar.setVisible(true);
+            this.jButtonCadastrar.setVisible(false);
+            return;
+        }
+
+        this.jButtonEditar.setVisible(false);
+        this.jButtonCadastrar.setVisible(true);
+    }
+
+    public void preencherComboBoxStatusEditar(String status) {
+        if (status.equals("Pendente")) {
+            this.jComboBoxStatus.setSelectedIndex(0);
+        }
+
+        if (status.equals("Iniciada")) {
+            this.jComboBoxStatus.setSelectedIndex(1);
+        }
+
+        if (status.equals("Concluída")) {
+            this.jComboBoxStatus.setSelectedIndex(2);
+        }
+    }
+
+    public void preencherCamposTurmaEditar() throws ParseException {
+        if (this.turmaEditar != null) {
+            this.jTextFieldNome.setText(this.turmaEditar.getNome());
+            this.jTextFieldDescricao.setText(this.turmaEditar.getDescricao());
+            this.jFormattedTextFieldDataDeInicio.setText(Util.dateToStr(this.turmaEditar.getDataInicio()));
+            this.jFormattedTextFieldDataDeTermino.setText(Util.dateToStr(this.turmaEditar.getDataTermino()));
+            this.preencherComboBoxStatusEditar(this.turmaEditar.getStatus());
+            List<TurmaColaboradorCompetencia> turmaColaboradoresCompetencias
+                    = this.turmaEditar.getTurmaColaboradorCompetencia();
+            for (TurmaColaboradorCompetencia turmaColaboradorCompetencia : turmaColaboradoresCompetencias) {
+                this.inserirTabela(turmaColaboradorCompetencia.getidTurmaColaboradorCompetencia().getColaborador(),
+                        turmaColaboradorCompetencia.getidTurmaColaboradorCompetencia().getCompetencia(),
+                        turmaColaboradorCompetencia.getCargaHoraria(),
+                        turmaColaboradorCompetencia.getConteudo());
+            }
+        }
+    }
+
+    public Turma atualizarTurmaEditar() {
+        Turma turma = this.turmaEditar;
+        turma.setNome(this.jTextFieldNome.getText());
+        turma.setDescricao(this.jTextFieldDescricao.getText());
+        turma.setStatus(this.jComboBoxStatus.getSelectedItem().toString());
+        Date dataInicio = new Date();
+        Date dataTermino = new Date();
+        try {
+            dataInicio = Util.strToDate(this.jFormattedTextFieldDataDeInicio.getText());
+            dataTermino = Util.strToDate(this.jFormattedTextFieldDataDeTermino.getText());
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Verifique se as datas inseridas são válidas. Erro: "
+                    + ex, "Erro no processo de atualização da turma", JOptionPane.ERROR_MESSAGE);
+        }
+        turma.setDataInicio(dataInicio);
+        turma.setDataTermino(dataTermino);
+//        int id = this.gerenciadorInterfaceGrafica.getGerenciadorDominio().inserirTurma(turma);
+//        turma.setIdTurma(id);
+        List<TurmaColaboradorCompetencia> novaLista = new ArrayList<TurmaColaboradorCompetencia>();
+        for (int i = 0; i < this.jTableTabelaColaboradorCompetencia.getRowCount(); i++) {
+            TurmaColaboradorCompetencia novoRegistro = new TurmaColaboradorCompetencia();
+            TurmaColaboradorCompetenciaId novoIdComposto = new TurmaColaboradorCompetenciaId();
+            novoIdComposto.setTurma(turma);
+            novoIdComposto.setColaborador((Colaborador) this.jTableTabelaColaboradorCompetencia.getValueAt(i, 0));
+            novoIdComposto.setCompetencia((Competencia) this.jTableTabelaColaboradorCompetencia.getValueAt(i, 1));
+            novoRegistro.setId(novoIdComposto);
+            novoRegistro.setCargaHoraria((int) this.jTableTabelaColaboradorCompetencia.getValueAt(i, 2));
+            novoRegistro.setConteudo((String) this.jTableTabelaColaboradorCompetencia.getValueAt(i, 3));
+            novaLista.add(novoRegistro);
+        }
+        turma.setTurmaColaboradorCompetencia(novaLista);
+        return turma;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -191,7 +271,6 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
         jTableTabelaColaboradorCompetencia = new javax.swing.JTable();
         jButtonCadastrar = new javax.swing.JButton();
         jButtonEditar = new javax.swing.JButton();
-        jButtonPesquisar = new javax.swing.JButton();
         jLabelCargaHoraria = new javax.swing.JLabel();
         jTextFieldCargaHoraria = new javax.swing.JTextField();
         jLabelConteudo = new javax.swing.JLabel();
@@ -308,13 +387,6 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
 
         jButtonEditar.setText("Editar");
 
-        jButtonPesquisar.setText("Pesquisar");
-        jButtonPesquisar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonPesquisarActionPerformed(evt);
-            }
-        });
-
         jLabelCargaHoraria.setText("Carga Horária");
 
         jLabelConteudo.setText("Conteúdo");
@@ -332,15 +404,9 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonPesquisar)
-                                .addGap(57, 57, 57))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(126, 126, 126)
-                                .addComponent(jTextFieldDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(126, 126, 126)
+                        .addComponent(jTextFieldDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jFormattedTextFieldDataDeInicio, javax.swing.GroupLayout.Alignment.LEADING)
@@ -353,7 +419,7 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelStatus)
                             .addComponent(jComboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabelNome)
                         .addGap(249, 249, 249)
@@ -407,19 +473,14 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabelTitulo)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelNome)
-                            .addComponent(jLabelDescricao))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jButtonPesquisar)))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNome)
+                    .addComponent(jLabelDescricao))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelDataDeInicio)
@@ -463,10 +524,6 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButtonPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPesquisarActionPerformed
-        gerenciadorInterfaceGrafica.abrirPesquisaTurma();
-    }//GEN-LAST:event_jButtonPesquisarActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         this.jComboBoxNomeColaborador.removeAllItems();
@@ -545,7 +602,6 @@ public class DialogCadastroTurma extends javax.swing.JDialog {
     private javax.swing.JButton jButtonAdicionarColaboradorCompetencia;
     private javax.swing.JButton jButtonCadastrar;
     private javax.swing.JButton jButtonEditar;
-    private javax.swing.JButton jButtonPesquisar;
     private javax.swing.JComboBox<Colaborador> jComboBoxNomeColaborador;
     private javax.swing.JComboBox<Competencia> jComboBoxNomeCompetencia;
     private javax.swing.JComboBox<String> jComboBoxStatus;

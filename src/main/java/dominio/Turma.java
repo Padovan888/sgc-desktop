@@ -2,6 +2,7 @@ package dominio;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +31,7 @@ public class Turma implements Serializable {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @OneToMany(mappedBy = "idTurmaColaboradorCompetencia.turma", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "idTurmaColaboradorCompetencia.turma", fetch = FetchType.EAGER)
     private List<TurmaColaboradorCompetencia> turmaColaboradorCompetencia = new ArrayList<>();
 
     public Turma() {
@@ -99,6 +100,15 @@ public class Turma implements Serializable {
 
     public void setTurmaColaboradorCompetencia(List<TurmaColaboradorCompetencia> turmaColaboradorCompetencia) {
         this.turmaColaboradorCompetencia = turmaColaboradorCompetencia;
+    }
+
+    @Override
+    public String toString() {
+        return this.getNome();
+    }
+
+    public Object[] toArray() throws ParseException {
+        return new Object[]{this, this.getDataInicio(), this.getDataTermino(), this.getStatus()};
     }
 
 }
